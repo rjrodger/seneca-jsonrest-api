@@ -20,5 +20,16 @@ function update() {
   })
 }
 
+function remove(id) {
+  var foo = foolist1.get(id)
+  console.log(foo)
+  foo.destroy()
+  /*
+  if( foo ) {
+    foolist1.remove(foo)
+  }
+  */
+}
+
 foolist1.fetch()
 </script>
