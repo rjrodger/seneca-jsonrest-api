@@ -1,0 +1,22 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+<script src="/js/util/browser.js"></script>
+<script>
+var Foo     = Backbone.Model.extend({})
+var FooList = Backbone.Collection.extend({url:'/api/rest/foo',model:Foo})
+
+var foolist1 = new FooList()
+foolist1.on('reset',function(){
+  foolist1.each(function(foo){
+    console.log(foo.toJSON())
+
+    foo.set('when',new Date().getTime())
+    foo.on('update',function(){
+       console.log('saved',foo.toJSON())
+    })
+    foo.save()
+  })
+})
+foolist1.fetch()
+</script>

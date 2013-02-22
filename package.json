@@ -1,0 +1,28 @@
+{
+  "name": "seneca-jsonrest-api",
+  "version": "0.1.0",
+  "description": "A HTTP JSON REST API for Seneca entities",
+  "main": "lib/jsonrest-api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rjrodger/seneca-jsonrest-api.git"
+  },
+  "keywords": [
+    "seneca",
+    "json",
+    "rest",
+    "api"
+  ],
+  "author": "Richard Rodger (@rjrodger)",
+  "license": "MIT",
+  "devDependencies": {
+    "seneca": "~0.5.1",
+    "gex": "0.0.3"
+  },
+  "dependencies": {
+    "underscore": "~1.4.4"
+  }
+}
