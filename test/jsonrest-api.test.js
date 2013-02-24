@@ -64,7 +64,7 @@ describe('jsonrest-api', function() {
 
   function do_methods(pin,entname,vals) {
     return function() {
-      pin.post({name:entname,data$:{a:1}},function(err,saved){
+      pin.post({name:entname,data:{a:1}},function(err,saved){
         assert.ok(null==err)
         //console.dir(saved)
         assert.ok(saved.id)

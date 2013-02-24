@@ -24,5 +24,10 @@
   },
   "dependencies": {
     "underscore": "~1.4.4"
-  }
+  },
+  "files": [
+    "README.md",
+    "LICENSE.txt",
+    "lib"
+  ]
 }
