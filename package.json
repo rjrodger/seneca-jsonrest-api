@@ -1,6 +1,6 @@
 {
   "name": "seneca-jsonrest-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A HTTP JSON REST API for Seneca entities",
   "main": "lib/jsonrest-api.js",
   "scripts": {
