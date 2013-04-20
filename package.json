@@ -4,7 +4,7 @@
   "description": "A HTTP JSON REST API for Seneca entities",
   "main": "lib/jsonrest-api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha test/jsonrest-api.test.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,9 @@
   "license": "MIT",
   "devDependencies": {
     "seneca": "~0.5.1",
+    "seneca-engage":"*",
+    "connect": "*",
+    "mocha": "*",
     "gex": "0.0.3"
   },
   "dependencies": {
