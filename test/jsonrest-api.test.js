@@ -14,9 +14,12 @@ var _  = require('underscore')
 var gex  = require('gex')
 
 
+var jsonrest_api = require('..')
+
+
 var seneca = require('seneca')()
 
-seneca.use( 'engage' )
+
 seneca.use( require('..') )
 seneca.use( require('..'), {tag$:'aspects', aspect:true, prefix:'/aspects/rest'})
 seneca.use( require('..'), {tag$:'injects', aspect:true, prefix:'/inject/rest'})
@@ -59,6 +62,62 @@ describe('jsonrest-api', function() {
   
   it('version', function() {
     assert.ok(gex(seneca.version),'0.5.*')
+  })
+
+
+  it('allow', function(){
+    assert.ok( jsonrest_api.__allow({name:'a'},{name:'a'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a'},{name:'x'}) )
+    assert.ok( jsonrest_api.__allow({name:'a'},{}) ) // passes!
+
+    assert.ok( jsonrest_api.__allow({base:'a'},{base:'a'}) )
+    assert.ok( !jsonrest_api.__allow({base:'a'},{base:'x'}) )
+    assert.ok( jsonrest_api.__allow({base:'a'},{}) ) // passes!
+
+    assert.ok( jsonrest_api.__allow({zone:'a'},{zone:'a'}) )
+    assert.ok( !jsonrest_api.__allow({zone:'a'},{zone:'x'}) )
+    assert.ok( jsonrest_api.__allow({zone:'a'},{}) ) // passes!
+
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b'},{name:'a',base:'b'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b'},{name:'x',base:'b'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b'},{name:'a',base:'x'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b'},{name:'x',base:'x'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b'},{name:'a'}) ) // passes!
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b'},{base:'b'}) ) // passes!
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b'},{}) ) // passes!
+
+    assert.ok( jsonrest_api.__allow({name:'a',zone:'b'},{name:'a',zone:'b'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',zone:'b'},{name:'x',zone:'b'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',zone:'b'},{name:'a',zone:'x'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',zone:'b'},{name:'x',zone:'x'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',zone:'b'},{name:'a'}) ) // passes!
+    assert.ok( jsonrest_api.__allow({name:'a',zone:'b'},{zone:'b'}) ) // passes!
+    assert.ok( jsonrest_api.__allow({name:'a',zone:'b'},{}) ) // passes!
+
+    assert.ok( jsonrest_api.__allow({base:'a',zone:'b'},{base:'a',zone:'b'}) )
+    assert.ok( !jsonrest_api.__allow({base:'a',zone:'b'},{base:'x',zone:'b'}) )
+    assert.ok( !jsonrest_api.__allow({base:'a',zone:'b'},{base:'a',zone:'x'}) )
+    assert.ok( !jsonrest_api.__allow({base:'a',zone:'b'},{base:'x',zone:'x'}) )
+    assert.ok( jsonrest_api.__allow({base:'a',zone:'b'},{base:'a'}) ) // passes!
+    assert.ok( jsonrest_api.__allow({base:'a',zone:'b'},{zone:'b'}) ) // passes!
+    assert.ok( jsonrest_api.__allow({base:'a',zone:'b'},{}) ) // passes!
+
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a',base:'b',zone:'c'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'x',base:'b',zone:'c'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a',base:'x',zone:'c'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a',base:'b',zone:'x'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'x',base:'x',zone:'c'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a',base:'x',zone:'x'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'x',base:'b',zone:'x'}) )
+    assert.ok( !jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'x',base:'x',zone:'x'}) )
+
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{base:'b',zone:'c'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a',zone:'c'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a',base:'b'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{zone:'c'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{name:'a'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{base:'b'}) )
+    assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{}) )
   })
 
 
