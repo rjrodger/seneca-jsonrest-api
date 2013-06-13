@@ -23,7 +23,7 @@ var seneca = require('seneca')()
 seneca.use( require('..') )
 seneca.use( require('..'), {tag$:'aspects', aspect:true, prefix:'/aspects/rest'})
 seneca.use( require('..'), {tag$:'injects', aspect:true, prefix:'/inject/rest'})
-seneca.use( require('..'), {tag$:'access', aspect:'user-access-entity-type', prefix:'/access/rest'})
+seneca.use( require('..'), {tag$:'access', aspect:'user-access', prefix:'/access/rest'})
 
 
 var jsonrestapi = seneca.pin({role:'jsonrest-api',prefix:'/api/rest',method:'*'})
@@ -180,20 +180,20 @@ describe('jsonrest-api', function() {
     b2_n1.make$({m:3,a2:1}).save$(setent)
     b2_n1.make$({m:4,a2:2}).save$(setent)
 
-    var user = {access:{base:'b1'}}
+    var user = {id:'aaa',nick:'u1',access:{base:'b1'}}
     jsonrestapi_access.get({user:user,base:'b1',name:'n1',id:ents[1].id},function(err,loaded){
       assert.ok(null==err)
       assert.equal(ents[1].id,loaded.id)
     })
 
     jsonrestapi_access.get({user:user,base:'b2',name:'n1',id:ents[3].id},function(err,loaded){
-      assert.ok(null==err)
-      assert.equal(null,loaded)
+      assert.ok(null!=err)
+      assert.equal('permission_denied',err.seneca.code)
     })
 
     jsonrestapi_access.get({base:'b2',name:'n1',id:ents[3].id},function(err,loaded){
-      assert.ok(null==err)
-      assert.equal(ents[3].id,loaded.id)
+      assert.ok(null!=err)
+      assert.equal('permission_denied',err.seneca.code)
     })
   })
   
