@@ -64,7 +64,7 @@ describe('jsonrest-api', function() {
     assert.ok(gex(seneca.version),'0.5.*')
   })
 
-
+/*
   it('allow', function(){
     assert.ok( jsonrest_api.__allow({name:'a'},{name:'a'}) )
     assert.ok( !jsonrest_api.__allow({name:'a'},{name:'x'}) )
@@ -119,7 +119,7 @@ describe('jsonrest-api', function() {
     assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{base:'b'}) )
     assert.ok( jsonrest_api.__allow({name:'a',base:'b',zone:'c'},{}) )
   })
-
+*/
 
   function do_methods(pin,entname,vals) {
     return function() {
