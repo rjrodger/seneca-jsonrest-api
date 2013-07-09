@@ -1,6 +1,6 @@
 {
   "name": "seneca-jsonrest-api",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A HTTP JSON REST API for Seneca entities",
   "main": "lib/jsonrest-api.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "author": "Richard Rodger (@rjrodger)",
   "license": "MIT",
   "devDependencies": {
-    "seneca": "~0.5.1",
+    "seneca": ">=0.5.9",
     "seneca-engage":"*",
     "connect": "*",
     "mocha": "*",
