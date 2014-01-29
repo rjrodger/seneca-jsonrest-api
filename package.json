@@ -28,7 +28,7 @@
     "underscore": "1.5.x"
   },
   "peerDependencies": {
-    "seneca": "*",
+    "seneca": "*"
   },
   "files": [
     "README.md",
