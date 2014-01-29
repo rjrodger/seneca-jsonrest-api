@@ -1,21 +1,21 @@
-/* Copyright (c) 2013 Richard Rodger, MIT License */
+/* Copyright (c) 2013-2014 Richard Rodger, MIT License */
 "use strict";
 
 
-var _   = require('underscore')
+var _ = require('underscore')
 
 
 function noware(req,res,next) {
   next()
 }
 
-// FIX: update to latest plugin format
-module.exports = function( options, register ) {
+
+module.exports = function( options ) {
   var seneca = this
-  var name = "jsonrest-api"
+  var plugin = "jsonrest-api"
 
 
-  options = this.util.deepextend({
+  options = seneca.util.deepextend({
     prefix:'/api/rest',
     aspect:false,
     list:{embed:false},
@@ -45,7 +45,7 @@ module.exports = function( options, register ) {
     return function (si,ctxt,done,func){
       if( options.aspect ) {
         si.act(
-          {role:name,prefix:options.prefix,aspect:kind, 
+          {role:plugin,prefix:options.prefix,aspect:kind, 
            advice:'before', ctxt:ctxt, default$:ctxt}, 
           function(err,ctxt) {
             if( err ) return done(err);
@@ -55,7 +55,7 @@ module.exports = function( options, register ) {
 
               ctxt.out = out
               si.act(
-                {role:name,prefix:options.prefix,aspect:kind, 
+                {role:plugin,prefix:options.prefix,aspect:kind, 
                  advice:'after', ctxt:ctxt, default$:out},
                 done
               )
@@ -73,7 +73,7 @@ module.exports = function( options, register ) {
 
 
 
-  this.add({role:name,prefix:options.prefix,method:'get'},function(args,done){
+  this.add({role:plugin,prefix:options.prefix,method:'get'},function(args,done){
     var ent_type = parse_ent(args)
  
     var qent = this.make(ent_type.zone,ent_type.base,ent_type.name)
@@ -157,17 +157,17 @@ module.exports = function( options, register ) {
   }
 
 
-  this.add({role:name,prefix:options.prefix,method:'put'},function(args,done){
+  this.add({role:plugin,prefix:options.prefix,method:'put'},function(args,done){
     putpost(this,args,done)
   })
 
 
-  this.add({role:name,prefix:options.prefix,method:'post'},function(args,done){
+  this.add({role:plugin,prefix:options.prefix,method:'post'},function(args,done){
     putpost(this,args,done)
   })
 
 
-  this.add({role:name,prefix:options.prefix,method:'delete'},function(args,done){
+  this.add({role:plugin,prefix:options.prefix,method:'delete'},function(args,done){
     var ent_type = parse_ent(args)
 
     if( ent_type.entid ) {
@@ -230,9 +230,9 @@ module.exports = function( options, register ) {
   }
 
 
-  var service = this.http({
+  seneca.act({role:'web',use:{
     prefix:options.prefix,
-    pin:{role:name,prefix:options.prefix,method:'*'},
+    pin:{role:plugin,prefix:options.prefix,method:'*'},
     startware:options.startware,
     premap:options.premap,
     map:{
@@ -243,16 +243,13 @@ module.exports = function( options, register ) {
     },
     postmap:options.postmap,
     endware:options.endware,
-  })
+  }})
 
 
-  register(null,{
-    name:name,
-    service:service
-  })
+  return {
+    name:plugin
+  }
 }
 
 
-// for testing
-//cart.__allow = allow
 

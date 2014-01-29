@@ -1,4 +1,4 @@
-/* Copyright (c) 2013 Richard Rodger */
+/* Copyright (c) 2013-2014 Richard Rodger */
 "use strict";
 
 
@@ -20,7 +20,7 @@ app.use( connect.static('./public') )
 app.use( connect.bodyParser() )
 app.use( connect.cookieParser() )
 app.use( connect.json() )
-app.use( seneca.service() )
+app.use( seneca.export('web') )
 
 app.listen(3000)
 
