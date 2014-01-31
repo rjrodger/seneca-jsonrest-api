@@ -3,13 +3,12 @@
 
 
 // node basic.app.js 
-
+// must be run inside test folder so static works
 
 var connect = require('connect')
 
 var seneca = require('seneca')()
 
-seneca.use( 'engage' )
 seneca.use( require('..') )
 
 

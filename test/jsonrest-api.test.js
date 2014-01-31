@@ -71,7 +71,7 @@ describe('jsonrest-api', function() {
         assert.ok(null==err)
         assert.ok(saved.id)
         assert.equal(saved.a,1)
-        assert.equal(saved.entity$.name,entname)
+        assert.equal(seneca.util.parsecanon(saved.entity$).name,entname)
         if( vals ) { assert.equal(saved.b,vals[0]) }
 
       ;pin.get({name:entname,id:saved.id},function(err,loaded){
@@ -79,7 +79,7 @@ describe('jsonrest-api', function() {
         assert.ok(null==err)
         assert.equal(loaded.id,saved.id)
         assert.equal(loaded.a,1)
-        assert.equal(loaded.entity$.name,entname)
+        assert.equal(seneca.util.parsecanon(loaded.entity$).name,entname)
         if( vals ) { assert.equal(loaded.b,vals[1]) }
 
       ;pin.get({name:entname},function(err,list){
@@ -87,7 +87,7 @@ describe('jsonrest-api', function() {
         assert.ok(null==err)
         assert.equal(1,list.length)
         assert.equal(list[0].a,1)
-        assert.equal(list[0].entity$.name,entname)
+        assert.equal(seneca.util.parsecanon(list[0].entity$).name,entname)
         if( vals ) { assert.equal(list[0].b,vals[0]) }
 
       ;pin.delete({name:entname,id:saved.id},function(err,deleted){

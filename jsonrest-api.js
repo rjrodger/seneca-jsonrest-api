@@ -10,6 +10,13 @@ function noware(req,res,next) {
 }
 
 
+function parseJSON(o) {
+  return null == o ? {} : _.isString(o) ? JSON.parse(o) : o
+}
+
+var notfoundres = {httpstatus$:404}
+
+
 module.exports = function( options ) {
   var seneca = this
   var plugin = "jsonrest-api"
@@ -77,37 +84,27 @@ module.exports = function( options ) {
     var ent_type = parse_ent(args)
  
     var qent = this.make(ent_type.zone,ent_type.base,ent_type.name)
+
     if( ent_type.entid ) {
       load_aspect(this,{args:args,qent:qent},done,function(ctxt,done){
         ctxt.qent.load$(ent_type.entid,function(err,ent){
-          done(err, ent ? ent.data$() : null )
+          done(err, ent ? ent.data$(true,'string') : notfoundres )
         })
       })
     }
     else {
-      var q = {}
-      if(args.q) {
-        if(typeof(args.q)==='string'){
-          q = JSON.parse(args.q);
-        } else {
-          q = args.q;
-        }
-      } 
+      var q = parseJSON(args.q)
 
       if( args.limit ) {
-        q.limit$ = parseInt(args.limit)
+        q.limit$ = parseInt(args.limit,10)
       }
 
       if( args.skip ) {
-        q.skip$ = parseInt(args.skip)
+        q.skip$ = parseInt(args.skip,10)
       }
 
       if( args.sort ) {
-        if(typeof(args.sort)==='string'){
-          q.sort$ = JSON.parse(args.sort);
-        } else {
-          q.sort$ = args.sort;
-        }
+        q.sort$ = parseJSON( args.sort )
       }
 
 
@@ -115,7 +112,7 @@ module.exports = function( options ) {
         ctxt.qent.list$(ctxt.q,function(err,list){
           if( err ) return done(err);
 
-          var out, data = _.map(list,function(ent){return ent.data$()})
+          var out, data = _.map(list,function(ent){return ent.data$(true,'string')})
 
           if( _.isString(options.list.embed) ) {
             out = {}
@@ -150,7 +147,7 @@ module.exports = function( options ) {
 
     save_aspect(si,{args:args,ent:ent},done,function(ctxt,done){
       ctxt.ent.save$(function(err,ent){
-        var data = ent ? ent.data$() : null
+        var data = ent ? ent.data$(true,'string') : null
         done(err, data)
       })
     })
@@ -203,10 +200,12 @@ module.exports = function( options ) {
       args.name = def(parts[0])
     }
 
-    
+
+    // query properties are verbatim
+    // query meta data params use $ suffix
+
     if( req.query ) {
-      args.q = _.extend({},args.q,req.query)
-      args.q = seneca.util.clean(args.q)
+      args.q = seneca.util.clean( _.extend({},args.q$,req.query) )
 
       if( req.query.q$ ) {
         args.q = _.extend(JSON.parse(req.query.q$),args.q)
