@@ -32,6 +32,8 @@ module.exports = function( options ) {
     postmap:noware,
     endware:noware,
 
+    meta:true,
+    canonalias:{}
   },options)
 
   
@@ -88,7 +90,8 @@ module.exports = function( options ) {
     if( ent_type.entid ) {
       load_aspect(this,{args:args,qent:qent},done,function(ctxt,done){
         ctxt.qent.load$(ent_type.entid,function(err,ent){
-          done(err, ent ? ent.data$(true,'string') : notfoundres )
+          var data = ent.data$(options.meta,'string')
+          done(err, ent ? data : notfoundres )
         })
       })
     }
@@ -112,7 +115,10 @@ module.exports = function( options ) {
         ctxt.qent.list$(ctxt.q,function(err,list){
           if( err ) return done(err);
 
-          var out, data = _.map(list,function(ent){return ent.data$(true,'string')})
+          var out, data = _.map(list,function(ent){
+            var data = ent.data$(options.meta,'string')
+            return data
+          })
 
           if( _.isString(options.list.embed) ) {
             out = {}
@@ -182,7 +188,7 @@ module.exports = function( options ) {
 
   
   function resolve(req,res,args,act,respond) {
-    var kind = req.params.kind
+    var kind  = options.canonalias[req.params.kind] || req.params.kind
     var parts = kind.split('_')
     
     function def(p) { return _.isString(p) ? (0 < p.length ? p : void 0) : void 0 }
