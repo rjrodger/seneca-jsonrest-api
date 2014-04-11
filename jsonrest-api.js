@@ -16,11 +16,14 @@ function parseJSON(o) {
 
 var notfoundres = {httpstatus$:404}
 
+var mark = '-'
+
 
 module.exports = function( options ) {
   var seneca = this
   var plugin = "jsonrest-api"
 
+  //console.dir(options)
 
   options = seneca.util.deepextend({
     prefix:'/api/rest',
@@ -33,16 +36,51 @@ module.exports = function( options ) {
     endware:noware,
 
     meta:true,
-    canonalias:{}
+    canonalias:{},
+    pin:null
   },options)
 
   
 
+  var validprops = {zone:1,base:1,name:1}
+
+  var pins = options.pin
+  //console.dir(pins)
+
+  pins = pins ? _.isArray(pins) ? pins : [pins] : []
+  //console.log('canon')
+  //console.dir(pins)
+
+  _.map(pins,function(pin){
+    pin = _.isString(pin) ? seneca.util.parsecanon(pin) : pin
+    _.each(pin,function(v,k){
+      if( null == v || '' == v || '*' == v || !validprops[k]) {
+        delete pin[k]
+      }
+      _.each(validprops, function(z,vp){
+        if( null == pin[vp] ) {
+          pin[vp] = mark
+        }
+      })
+
+    })
+    //console.dir(pin)
+
+  })
+  if( 0 == pins.length ) {
+    pins.push({})
+  }
+
+
+  //console.dir(pins)
+  
+
+
   function parse_ent(args) {
     var out = {
-      name:  args.name,
-      base:  args.base,
-      zone:  args.zone,
+      name:  mark==args.name ? void 0 : args.name,
+      base:  mark==args.base ? void 0 : args.base,
+      zone:  mark==args.zone ? void 0 : args.zone,
       entid: args.id
     }
 
@@ -81,8 +119,32 @@ module.exports = function( options ) {
   var remove_aspect = make_aspect('remove')
 
 
+  //console.log('ADD')
+  _.each(pins,function(pin){
+    //console.log(pin)
 
-  this.add({role:plugin,prefix:options.prefix,method:'get'},function(args,done){
+    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'get'}),action_get)
+
+    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'put'}),function(args,done){
+      putpost(this,args,done)
+    })
+
+    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'post'}),function(args,done){
+      putpost(this,args,done)
+    })
+
+    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'delete'}),action_delete)
+  })
+
+
+
+
+
+  function action_get(args,done){
+    //console.log('ACTION GET')
+    //console.log(seneca.util.clean(args))
+    //console.trace()
+
     var ent_type = parse_ent(args)
  
     var qent = this.make(ent_type.zone,ent_type.base,ent_type.name)
@@ -130,12 +192,12 @@ module.exports = function( options ) {
         })
       })
     }
-  })
+  }
 
 
 
   // lenient with PUT and POST - treat them as aliases, and both can create new entities
-  function putpost(si,args,done) {
+  function action_putpost(si,args,done) {
     var ent_type = parse_ent(args)
 
     var ent = si.make(ent_type.zone,ent_type.base,ent_type.name)
@@ -160,17 +222,11 @@ module.exports = function( options ) {
   }
 
 
-  this.add({role:plugin,prefix:options.prefix,method:'put'},function(args,done){
-    putpost(this,args,done)
-  })
 
 
-  this.add({role:plugin,prefix:options.prefix,method:'post'},function(args,done){
-    putpost(this,args,done)
-  })
 
 
-  this.add({role:plugin,prefix:options.prefix,method:'delete'},function(args,done){
+  function action_delete(args,done){
     var ent_type = parse_ent(args)
 
     if( ent_type.entid ) {
@@ -183,7 +239,7 @@ module.exports = function( options ) {
       })
     }
     else return done(null,{id:null})
-  })
+  }
 
 
   
@@ -199,10 +255,13 @@ module.exports = function( options ) {
       args.name = def(parts[2])
     }
     else if( 2 == parts.length ) {
+      args.zone = mark
       args.base = def(parts[0])
       args.name = def(parts[1])
     }
     else if( 1 == parts.length ) {
+      args.zone = mark
+      args.base = mark
       args.name = def(parts[0])
     }
 
@@ -231,24 +290,36 @@ module.exports = function( options ) {
     }
     
 
+    //console.log('RESOLVE')
+    //console.log(seneca.util.clean(args))
+
     act(args,respond)
   }
 
 
-  seneca.act({role:'web',use:{
-    prefix:options.prefix,
-    pin:{role:plugin,prefix:options.prefix,method:'*'},
-    startware:options.startware,
-    premap:options.premap,
-    map:{
-      get:{GET:resolve,alias:':kind/:id?'},
-      put:{PUT:resolve,alias:':kind/:id?',data:true},
-      post:{POST:resolve,alias:':kind/:id?',data:true},
-      delete:{DELETE:resolve,alias:':kind/:id'}
-    },
-    postmap:options.postmap,
-    endware:options.endware,
-  }})
+  _.each(pins, function(pin){
+    pin = _.extend({},pin,{role:plugin,prefix:options.prefix,method:'*'})
+
+    
+    //console.log(pin)
+
+
+    seneca.act({role:'web',use:{
+      prefix:options.prefix,
+      pin:pin,
+      //pin:{role:plugin,prefix:options.prefix,method:'*'},
+      startware:options.startware,
+      premap:options.premap,
+      map:{
+        get:{GET:resolve,alias:':kind/:id?'},
+        put:{PUT:resolve,alias:':kind/:id?',data:true},
+        post:{POST:resolve,alias:':kind/:id?',data:true},
+        delete:{DELETE:resolve,alias:':kind/:id'}
+      },
+      postmap:options.postmap,
+      endware:options.endware,
+    }})
+  })
 
 
   return {
