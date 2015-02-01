@@ -61,6 +61,7 @@
     prefix:<span class="hljs-string">'/api/rest'</span>,
     aspect:<span class="hljs-literal">false</span>,
     list:{embed:<span class="hljs-literal">false</span>},
+    allow_id:<span class="hljs-literal">false</span>,
 
     startware:noware,
     premap:noware,
@@ -177,8 +178,8 @@
     <span class="hljs-keyword">if</span>( ent_type.entid ) {
       load_aspect(<span class="hljs-keyword">this</span>,{args:args,qent:qent},done,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctxt,done)</span></span>{
         ctxt.qent.load$(ent_type.entid,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,ent)</span></span>{
-          <span class="hljs-keyword">var</span> data = ent.data$(options.meta,<span class="hljs-string">'string'</span>)
-          done(err, ent ? data : notfoundres )
+          <span class="hljs-keyword">var</span> data = ent ? ent.data$(options.meta,<span class="hljs-string">'string'</span>) : notfoundres
+          done( err, data )
         })
       })
     }
@@ -244,8 +245,11 @@
     <span class="hljs-keyword">var</span> fields = _.pick(data,good)
     ent.data$(fields)
 
-    <span class="hljs-keyword">if</span>( ent_type.entid ) {
+    <span class="hljs-keyword">if</span>( <span class="hljs-literal">null</span> != ent_type.entid ) {
       ent.id = ent_type.entid
+    }
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( <span class="hljs-literal">null</span> != data.id$ &amp;&amp; options.allow_id ) {
+      ent.id$ = data.id$
     }
 
     save_aspect(si,{args:args,ent:ent},done,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctxt,done)</span></span>{
