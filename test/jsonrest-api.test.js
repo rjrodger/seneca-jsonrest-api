@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2014 Richard Rodger */
+/* Copyright (c) 2013-2015 Richard Rodger */
 "use strict";
 
 
@@ -10,7 +10,7 @@ var assert  = require('assert')
 var util    = require('util')
 
 
-var _  = require('underscore')
+var _  = require('lodash')
 var gex  = require('gex')
 
 

@@ -1,8 +1,8 @@
-/* Copyright (c) 2013-2014 Richard Rodger, MIT License */
+/* Copyright (c) 2013-2015 Richard Rodger, MIT License */
 "use strict";
 
 
-var _ = require('underscore')
+var _ = require('lodash')
 
 
 function noware(req,res,next) {
@@ -22,8 +22,6 @@ var mark = '-'
 module.exports = function( options ) {
   var seneca = this
   var plugin = "jsonrest-api"
-
-  //console.dir(options)
 
   options = seneca.util.deepextend({
     prefix:'/api/rest',
@@ -45,11 +43,8 @@ module.exports = function( options ) {
   var validprops = {zone:1,base:1,name:1}
 
   var pins = options.pin
-  //console.dir(pins)
 
   pins = pins ? _.isArray(pins) ? pins : [pins] : []
-  //console.log('canon')
-  //console.dir(pins)
 
   _.map(pins,function(pin){
     pin = _.isString(pin) ? seneca.util.parsecanon(pin) : pin
@@ -64,16 +59,10 @@ module.exports = function( options ) {
       })
 
     })
-    //console.dir(pin)
-
   })
   if( 0 == pins.length ) {
     pins.push({})
   }
-
-
-  //console.dir(pins)
-  
 
 
   function parse_ent(args) {
@@ -119,21 +108,27 @@ module.exports = function( options ) {
   var remove_aspect = make_aspect('remove')
 
 
-  //console.log('ADD')
   _.each(pins,function(pin){
-    //console.log(pin)
 
-    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'get'}),action_get)
+    seneca.add(
+      _.extend({},pin,{role:plugin,prefix:options.prefix,method:'get'}),
+      action_get)
 
-    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'put'}),function(args,done){
-      putpost(this,args,done)
-    })
+    seneca.add(
+      _.extend({},pin,{role:plugin,prefix:options.prefix,method:'put'}),
+      function(args,done){
+        action_putpost(this,args,done)
+      })
 
-    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'post'}),function(args,done){
-      putpost(this,args,done)
-    })
+    seneca.add(
+      _.extend({},pin,{role:plugin,prefix:options.prefix,method:'post'}),
+      function(args,done){
+        action_putpost(this,args,done)
+      })
 
-    seneca.add(_.extend({},pin,{role:plugin,prefix:options.prefix,method:'delete'}),action_delete)
+    seneca.add(
+      _.extend({},pin,{role:plugin,prefix:options.prefix,method:'delete'}),
+      action_delete)
   })
 
 
@@ -141,10 +136,6 @@ module.exports = function( options ) {
 
 
   function action_get(args,done){
-    //console.log('ACTION GET')
-    //console.log(seneca.util.clean(args))
-    //console.trace()
-
     var ent_type = parse_ent(args)
  
     var qent = this.make(ent_type.zone,ent_type.base,ent_type.name)
@@ -289,21 +280,13 @@ module.exports = function( options ) {
       }
     }
     
-
-    //console.log('RESOLVE')
-    //console.log(seneca.util.clean(args))
-
     act(args,respond)
   }
 
 
   _.each(pins, function(pin){
     pin = _.extend({},pin,{role:plugin,prefix:options.prefix,method:'*'})
-
     
-    //console.log(pin)
-
-
     seneca.act({role:'web',use:{
       prefix:options.prefix,
       pin:pin,
