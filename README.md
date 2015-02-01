@@ -47,7 +47,7 @@ in this repository, and
 
 Current Version: 0.3.0
 
-Tested on: Node 0.10.36, [Seneca](/rjrodger/seneca) 0.6.1
+Tested on: Node 0.10.36, [Seneca](//github.com/rjrodger/seneca) 0.6.1
 
 [![Build Status](https://travis-ci.org/rjrodger/seneca-jsonrest-api.png?branch=master)](https://travis-ci.org/rjrodger/seneca-jsonrest-api)
 
