@@ -1,4 +1,5 @@
 /* Copyright (c) 2013-2015 Richard Rodger, MIT License */
+/* jshint node:true, asi:true, eqnull:true */
 "use strict";
 
 
@@ -20,6 +21,7 @@ var mark = '-'
 
 
 module.exports = function( options ) {
+  /* jshint validthis:true */
   var seneca = this
   var plugin = "jsonrest-api"
 
@@ -49,7 +51,7 @@ module.exports = function( options ) {
   _.map(pins,function(pin){
     pin = _.isString(pin) ? seneca.util.parsecanon(pin) : pin
     _.each(pin,function(v,k){
-      if( null == v || '' == v || '*' == v || !validprops[k]) {
+      if( null == v || '' === v || '*' === v || !validprops[k]) {
         delete pin[k]
       }
       _.each(validprops, function(z,vp){
@@ -60,7 +62,7 @@ module.exports = function( options ) {
 
     })
   })
-  if( 0 == pins.length ) {
+  if( 0 === pins.length ) {
     pins.push({})
   }
 

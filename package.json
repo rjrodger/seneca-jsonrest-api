@@ -4,7 +4,8 @@
   "description": "A HTTP JSON REST API for Seneca entities",
   "main": "jsonrest-api.js",
   "scripts": {
-    "test": "./test.sh"
+    "test": "./test.sh",
+    "build": "./build.sh"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,9 @@
   "devDependencies": {
     "body-parser": "^1.11.0",
     "connect": "~3.3.4",
+    "docco": "^0.6.3",
     "gex": "~0.2.0",
+    "jshint": "^2.6.0",
     "mocha": "~2.1.0",
     "seneca": "plugin",
     "serve-static": "^1.8.1"
