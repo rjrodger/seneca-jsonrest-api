@@ -29,6 +29,7 @@ module.exports = function( options ) {
     prefix:'/api/rest',
     aspect:false,
     list:{embed:false},
+    allow_id:false,
 
     startware:noware,
     premap:noware,
@@ -145,8 +146,8 @@ module.exports = function( options ) {
     if( ent_type.entid ) {
       load_aspect(this,{args:args,qent:qent},done,function(ctxt,done){
         ctxt.qent.load$(ent_type.entid,function(err,ent){
-          var data = ent.data$(options.meta,'string')
-          done(err, ent ? data : notfoundres )
+          var data = ent ? ent.data$(options.meta,'string') : notfoundres
+          done( err, data )
         })
       })
     }
@@ -202,8 +203,11 @@ module.exports = function( options ) {
     var fields = _.pick(data,good)
     ent.data$(fields)
 
-    if( ent_type.entid ) {
+    if( null != ent_type.entid ) {
       ent.id = ent_type.entid
+    }
+    else if( null != data.id$ && options.allow_id ) {
+      ent.id$ = data.id$
     }
 
     save_aspect(si,{args:args,ent:ent},done,function(ctxt,done){

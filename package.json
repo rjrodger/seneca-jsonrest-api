@@ -1,6 +1,6 @@
 {
   "name": "seneca-jsonrest-api",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A HTTP JSON REST API for Seneca entities",
   "main": "jsonrest-api.js",
   "scripts": {
@@ -20,14 +20,14 @@
   "author": "Richard Rodger (@rjrodger)",
   "license": "MIT",
   "devDependencies": {
-    "body-parser": "^1.11.0",
+    "body-parser": "~1.11.0",
     "connect": "~3.3.4",
-    "docco": "^0.6.3",
+    "docco": "~0.6.3",
     "gex": "~0.2.0",
-    "jshint": "^2.6.0",
+    "jshint": "~2.6.0",
     "mocha": "~2.1.0",
     "seneca": "plugin",
-    "serve-static": "^1.8.1"
+    "serve-static": "~1.8.1"
   },
   "dependencies": {
     "lodash": "~2.4.1"

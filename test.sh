@@ -31,7 +31,7 @@ else
   echo "PASS: $POST_FOO_a0"
 fi
 
-if [ $GET_FOO_a1 != '{"entity$":"-/-/foo","tag":"AA","id":"a","zed":1}' ]; then
+if [ $GET_FOO_a1 != '{"entity$":"-/-/foo","tag":"AA","zed":1,"id":"a"}' ]; then
   echo "FAIL: $GET_FOO_a1"
   exit 1
 else

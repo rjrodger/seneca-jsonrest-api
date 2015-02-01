@@ -37,15 +37,14 @@ patterns so that they do not conflict.
 
 ## Examples
 
-See the
-[tests](https://github.com/rjrodger/seneca-jsonrest-api/tree/master/test)
-in this repository, and
-[seneca-data-editor](https://github.com/rjrodger/seneca-data-editor).
+   * [tests](https://github.com/rjrodger/seneca-jsonrest-api/tree/master/test) in this repository
+   * [seneca-examples/api-server](https://github.com/rjrodger/seneca-examples/tree/master/api-server)
+   * [seneca-data-editor](https://github.com/rjrodger/seneca-data-editor)
 
 
 ## Support
 
-Current Version: 0.3.0
+Current Version: 0.3.1
 
 Tested on: Node 0.10.36, [Seneca](//github.com/rjrodger/seneca) 0.6.1
 
