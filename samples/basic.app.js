@@ -2,7 +2,8 @@
 'use strict'
 
 // node basic.app.js
-// must be run inside test folder so static works
+// must be run inside sample folder so static works
+// curl http://127.0.0.1:3000/api/rest/foo/a
 
 var connect = require('connect')
 var serveStatic = require('serve-static')
