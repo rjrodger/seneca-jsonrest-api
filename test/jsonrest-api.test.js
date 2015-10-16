@@ -9,9 +9,7 @@ var lab = exports.lab = Lab.script()
 var describe = lab.describe
 var it = lab.it
 
-// mocha jsonrest-api.test.js
-
-var assert = require('chai').assert
+var expect = require('code').expect
 
 var gex = require('gex')
 
@@ -59,45 +57,47 @@ seneca.add({role: 'jsonrest-api', prefix: '/aspects/rest', aspect: 'list', advic
 
 describe('jsonrest-api', function () {
   it('version', function (done) {
-    assert.ok(gex(seneca.version), '0.5.*')
+    expect(gex(seneca.version)).to.exist()
     done()
   })
 
   function do_methods (pin, entname, vals) {
     return function (done) {
       pin.post({name: entname, data: {a: 1}}, function (err, saved) {
-        assert.isNull(err)
-        assert.ok(saved.id)
-        assert.equal(saved.a, 1)
-        assert.equal(seneca.util.parsecanon(saved.entity$).name, entname)
-        if (vals) { assert.equal(saved.b, vals[0]) }
+        expect(err).to.be.null()
+        expect(saved.id).to.exist()
+        expect(saved.a).to.equal(1)
+        expect(seneca.util.parsecanon(saved.entity$).name).to.be.equal(entname)
+
+        if (vals) { expect(saved.b).to.be.equal(vals[0]) }
 
         pin.get({name: entname, id: saved.id}, function (err, loaded) {
           // console.dir(loaded)
-          assert.isNull(err)
-          assert.equal(loaded.id, saved.id)
-          assert.equal(loaded.a, 1)
-          assert.equal(seneca.util.parsecanon(loaded.entity$).name, entname)
-          if (vals) { assert.equal(loaded.b, vals[1]) }
+          expect(err).to.be.null()
+          expect(loaded.id).to.equal(saved.id)
+          expect(loaded.a).to.equal(1)
+
+          expect(seneca.util.parsecanon(loaded.entity$).name).to.equal(entname)
+          if (vals) { expect(loaded.b, vals[1]) }
 
           pin.get({name: entname}, function (err, list) {
             // console.dir(list)
-            assert.isNull(err)
-            assert.equal(1, list.length)
-            assert.equal(list[0].a, 1)
-            assert.equal(seneca.util.parsecanon(list[0].entity$).name, entname)
-            if (vals) { assert.equal(list[0].b, vals[0]) }
+            expect(err).to.be.null()
+            expect(1).to.equal(list.length)
+            expect(list[0].a).to.equal(1)
+            expect(seneca.util.parsecanon(list[0].entity$).name).to.equal(entname)
+            if (vals) { expect(list[0].b).to.equal(vals[0]) }
 
             pin.delete({name: entname, id: saved.id}, function (err, deleted) {
               // console.dir(deleted)
-              assert.isNull(err)
-              assert.equal(loaded.id, deleted.id)
-              if (vals) { assert.equal(deleted.b, vals[2]) }
+              expect(err).to.be.null()
+              expect(loaded.id).to.equal(deleted.id)
+              if (vals) { expect(deleted.b).to.equal(vals[2]) }
 
               pin.get({name: entname}, function (err, list) {
                 // console.dir(list)
-                assert.isNull(err)
-                assert.equal(0, list.length)
+                expect(err).to.be.null()
+                expect(0).to.equal(list.length)
                 done()
               })
             })
