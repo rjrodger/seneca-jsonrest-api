@@ -12,7 +12,11 @@ function parseJSON (o) {
   return o == null ? {} : _.isString(o) ? JSON.parse(o) : o
 }
 
-var notfoundres = {httpstatus$: 404}
+var notfoundres = {
+  httpstatus$: 404,
+  code: 404,
+  message: 'Resource not found'
+}
 
 var mark = '-'
 
