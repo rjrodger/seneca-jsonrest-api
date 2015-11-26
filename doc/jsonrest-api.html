@@ -32,108 +32,99 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/* Copyright (c) 2013-2015 Richard Rodger, MIT License */</span>
 <span class="hljs-comment">/* jshint node:true, asi:true, eqnull:true */</span>
-<span class="hljs-pi">"use strict"</span>;
-
+<span class="hljs-pi">'use strict'</span>
 
 <span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)
 
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">noware</span><span class="hljs-params">(req,res,next)</span> </span>{
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">noware</span> (<span class="hljs-params">req, res, next</span>) </span>{
   next()
 }
 
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseJSON</span><span class="hljs-params">(o)</span> </span>{
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseJSON</span> (<span class="hljs-params">o</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span> == o ? {} : _.isString(o) ? <span class="hljs-built_in">JSON</span>.parse(o) : o
 }
 
-<span class="hljs-keyword">var</span> notfoundres = {httpstatus$:<span class="hljs-number">404</span>}
+<span class="hljs-keyword">var</span> notfoundres = {httpstatus$: <span class="hljs-number">404</span>}
 
 <span class="hljs-keyword">var</span> mark = <span class="hljs-string">'-'</span>
 
-
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( options )</span> </span>{
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">options</span>) </span>{
   <span class="hljs-comment">/* jshint validthis:true */</span>
   <span class="hljs-keyword">var</span> seneca = <span class="hljs-keyword">this</span>
-  <span class="hljs-keyword">var</span> plugin = <span class="hljs-string">"jsonrest-api"</span>
+  <span class="hljs-keyword">var</span> plugin = <span class="hljs-string">'jsonrest-api'</span>
 
   options = seneca.util.deepextend({
-    prefix:<span class="hljs-string">'/api/rest'</span>,
-    aspect:<span class="hljs-literal">false</span>,
-    list:{embed:<span class="hljs-literal">false</span>},
-    allow_id:<span class="hljs-literal">false</span>,
+    prefix: <span class="hljs-string">'/api/rest'</span>,
+    aspect: <span class="hljs-literal">false</span>,
+    list: {embed: <span class="hljs-literal">false</span>},
+    allow_id: <span class="hljs-literal">false</span>,
 
-    startware:noware,
-    premap:noware,
-    postmap:noware,
-    endware:noware,
+    startware: noware,
+    premap: noware,
+    postmap: noware,
+    endware: noware,
 
-    meta:<span class="hljs-literal">true</span>,
-    canonalias:{},
-    pin:<span class="hljs-literal">null</span>
-  },options)
+    meta: <span class="hljs-literal">true</span>,
+    canonalias: {},
+    pin: <span class="hljs-literal">null</span>
+  }, options)
 
-  
-
-  <span class="hljs-keyword">var</span> validprops = {zone:<span class="hljs-number">1</span>,base:<span class="hljs-number">1</span>,name:<span class="hljs-number">1</span>}
+  <span class="hljs-keyword">var</span> validprops = {zone: <span class="hljs-number">1</span>, base: <span class="hljs-number">1</span>, name: <span class="hljs-number">1</span>}
 
   <span class="hljs-keyword">var</span> pins = options.pin
 
   pins = pins ? _.isArray(pins) ? pins : [pins] : []
 
-  _.map(pins,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(pin)</span></span>{
+  _.map(pins, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pin</span>) </span>{
     pin = _.isString(pin) ? seneca.util.parsecanon(pin) : pin
-    _.each(pin,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(v,k)</span></span>{
-      <span class="hljs-keyword">if</span>( <span class="hljs-literal">null</span> == v || <span class="hljs-string">''</span> === v || <span class="hljs-string">'*'</span> === v || !validprops[k]) {
+    _.each(pin, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">v, k</span>) </span>{
+      <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> == v || <span class="hljs-string">''</span> === v || <span class="hljs-string">'*'</span> === v || !validprops[k]) {
         <span class="hljs-keyword">delete</span> pin[k]
       }
-      _.each(validprops, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(z,vp)</span></span>{
-        <span class="hljs-keyword">if</span>( <span class="hljs-literal">null</span> == pin[vp] ) {
+      _.each(validprops, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">z, vp</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> == pin[vp]) {
           pin[vp] = mark
         }
       })
-
     })
   })
-  <span class="hljs-keyword">if</span>( <span class="hljs-number">0</span> === pins.length ) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> === pins.length) {
     pins.push({})
   }
 
-
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parse_ent</span><span class="hljs-params">(args)</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parse_ent</span> (<span class="hljs-params">args</span>) </span>{
     <span class="hljs-keyword">var</span> out = {
-      name:  mark==args.name ? <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> : args.name,
-      base:  mark==args.base ? <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> : args.base,
-      zone:  mark==args.zone ? <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> : args.zone,
+      name: mark === args.name ? <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> : args.name,
+      base: mark === args.base ? <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> : args.base,
+      zone: mark === args.zone ? <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> : args.zone,
       entid: args.id
     }
 
     <span class="hljs-keyword">return</span> out
   }
 
-
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">make_aspect</span><span class="hljs-params">(kind)</span></span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(si,ctxt,done,func)</span></span>{
-      <span class="hljs-keyword">if</span>( options.aspect ) {
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">make_aspect</span> (<span class="hljs-params">kind</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">si, ctxt, done, func</span>) </span>{
+      <span class="hljs-keyword">if</span> (options.aspect) {
         si.act(
-          {role:plugin,prefix:options.prefix,aspect:kind, 
-           advice:<span class="hljs-string">'before'</span>, ctxt:ctxt, <span class="hljs-keyword">default</span>$:ctxt}, 
-          <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,ctxt)</span> </span>{
-            <span class="hljs-keyword">if</span>( err ) <span class="hljs-keyword">return</span> done(err);
+          {role: plugin, prefix: options.prefix, aspect: kind,
+          advice: <span class="hljs-string">'before'</span>, ctxt: ctxt, <span class="hljs-keyword">default</span>$: ctxt},
+          <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, ctxt</span>) </span>{
+            <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> done(err)
 
-            func.call(si,ctxt,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,out)</span></span>{
-              <span class="hljs-keyword">if</span>( err ) <span class="hljs-keyword">return</span> done(err);
+            func.call(si, ctxt, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, out</span>) </span>{
+              <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> done(err)
 
               ctxt.out = out
               si.act(
-                {role:plugin,prefix:options.prefix,aspect:kind, 
-                 advice:<span class="hljs-string">'after'</span>, ctxt:ctxt, <span class="hljs-keyword">default</span>$:out},
+                {role: plugin, prefix: options.prefix, aspect: kind,
+                advice: <span class="hljs-string">'after'</span>, ctxt: ctxt, <span class="hljs-keyword">default</span>$: out},
                 done
               )
             })
           })
       }
-      <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> func.call(si,ctxt,done)
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> func.call(si, ctxt, done)
     }
   }
 
@@ -142,79 +133,72 @@
   <span class="hljs-keyword">var</span> save_aspect = make_aspect(<span class="hljs-string">'save'</span>)
   <span class="hljs-keyword">var</span> remove_aspect = make_aspect(<span class="hljs-string">'remove'</span>)
 
-
-  _.each(pins,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(pin)</span></span>{
-
+  _.each(pins, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pin</span>) </span>{
     seneca.add(
-      _.extend({},pin,{role:plugin,prefix:options.prefix,method:<span class="hljs-string">'get'</span>}),
+      _.extend({}, pin, {role: plugin, prefix: options.prefix, method: <span class="hljs-string">'get'</span>}),
       action_get)
 
     seneca.add(
-      _.extend({},pin,{role:plugin,prefix:options.prefix,method:<span class="hljs-string">'put'</span>}),
-      <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(args,done)</span></span>{
-        action_putpost(<span class="hljs-keyword">this</span>,args,done)
+      _.extend({}, pin, {role: plugin, prefix: options.prefix, method: <span class="hljs-string">'put'</span>}),
+      <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">args, done</span>) </span>{
+        action_putpost(<span class="hljs-keyword">this</span>, args, done)
       })
 
     seneca.add(
-      _.extend({},pin,{role:plugin,prefix:options.prefix,method:<span class="hljs-string">'post'</span>}),
-      <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(args,done)</span></span>{
-        action_putpost(<span class="hljs-keyword">this</span>,args,done)
+      _.extend({}, pin, {role: plugin, prefix: options.prefix, method: <span class="hljs-string">'post'</span>}),
+      <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">args, done</span>) </span>{
+        action_putpost(<span class="hljs-keyword">this</span>, args, done)
       })
 
     seneca.add(
-      _.extend({},pin,{role:plugin,prefix:options.prefix,method:<span class="hljs-string">'delete'</span>}),
+      _.extend({}, pin, {role: plugin, prefix: options.prefix, method: <span class="hljs-string">'delete'</span>}),
       action_delete)
   })
 
-
-
-
-
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action_get</span><span class="hljs-params">(args,done)</span></span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action_get</span> (<span class="hljs-params">args, done</span>) </span>{
     <span class="hljs-keyword">var</span> ent_type = parse_ent(args)
- 
-    <span class="hljs-keyword">var</span> qent = <span class="hljs-keyword">this</span>.make(ent_type.zone,ent_type.base,ent_type.name)
 
-    <span class="hljs-keyword">if</span>( ent_type.entid ) {
-      load_aspect(<span class="hljs-keyword">this</span>,{args:args,qent:qent},done,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctxt,done)</span></span>{
-        ctxt.qent.load$(ent_type.entid,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,ent)</span></span>{
-          <span class="hljs-keyword">var</span> data = ent ? ent.data$(options.meta,<span class="hljs-string">'string'</span>) : notfoundres
-          done( err, data )
+    <span class="hljs-keyword">var</span> qent = <span class="hljs-keyword">this</span>.make(ent_type.zone, ent_type.base, ent_type.name)
+
+    <span class="hljs-keyword">if</span> (ent_type.entid) {
+      load_aspect(<span class="hljs-keyword">this</span>, {args: args, qent: qent}, done, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">ctxt, done</span>) </span>{
+        ctxt.qent.load$(ent_type.entid, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, ent</span>) </span>{
+          <span class="hljs-keyword">var</span> data = ent ? ent.data$(options.meta, <span class="hljs-string">'string'</span>) : notfoundres
+          done(err, data)
         })
       })
-    }
-    <span class="hljs-keyword">else</span> {
+    } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">var</span> q = parseJSON(args.q)
 
-      <span class="hljs-keyword">if</span>( args.limit ) {
-        q.limit$ = <span class="hljs-built_in">parseInt</span>(args.limit,<span class="hljs-number">10</span>)
+      <span class="hljs-keyword">if</span> (args.limit) {
+        q.limit$ = <span class="hljs-built_in">parseInt</span>(args.limit, <span class="hljs-number">10</span>)
       }
 
-      <span class="hljs-keyword">if</span>( args.skip ) {
-        q.skip$ = <span class="hljs-built_in">parseInt</span>(args.skip,<span class="hljs-number">10</span>)
+      <span class="hljs-keyword">if</span> (args.skip) {
+        q.skip$ = <span class="hljs-built_in">parseInt</span>(args.skip, <span class="hljs-number">10</span>)
       }
 
-      <span class="hljs-keyword">if</span>( args.sort ) {
-        q.sort$ = parseJSON( args.sort )
+      <span class="hljs-keyword">if</span> (args.sort) {
+        q.sort$ = parseJSON(args.sort)
       }
 
+      list_aspect(<span class="hljs-keyword">this</span>, {args: args, q: q, qent: qent}, done, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">ctxt, done</span>) </span>{
+        ctxt.qent.list$(ctxt.q, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, list</span>) </span>{
+          <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> done(err)
 
-      list_aspect(<span class="hljs-keyword">this</span>,{args:args,q:q,qent:qent},done,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctxt,done)</span></span>{
-        ctxt.qent.list$(ctxt.q,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,list)</span></span>{
-          <span class="hljs-keyword">if</span>( err ) <span class="hljs-keyword">return</span> done(err);
-
-          <span class="hljs-keyword">var</span> out, data = _.map(list,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ent)</span></span>{
-            <span class="hljs-keyword">var</span> data = ent.data$(options.meta,<span class="hljs-string">'string'</span>)
+          <span class="hljs-keyword">var</span> out
+          <span class="hljs-keyword">var</span> data = _.map(list, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">ent</span>) </span>{
+            <span class="hljs-keyword">var</span> data = ent.data$(options.meta, <span class="hljs-string">'string'</span>)
             <span class="hljs-keyword">return</span> data
           })
 
-          <span class="hljs-keyword">if</span>( _.isString(options.list.embed) ) {
+          <span class="hljs-keyword">if</span> (_.isString(options.list.embed)) {
             out = {}
             out[options.list.embed] = data
           }
-          <span class="hljs-keyword">else</span> out = data;
+          <span class="hljs-keyword">else</span> out = data
 
-          done(err,out)
+          done(err, out)
         })
       })
     }
@@ -233,72 +217,65 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action_putpost</span><span class="hljs-params">(si,args,done)</span> </span>{
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action_putpost</span> (<span class="hljs-params">si, args, done</span>) </span>{
     <span class="hljs-keyword">var</span> ent_type = parse_ent(args)
 
-    <span class="hljs-keyword">var</span> ent = si.make(ent_type.zone,ent_type.base,ent_type.name)
+    <span class="hljs-keyword">var</span> ent = si.make(ent_type.zone, ent_type.base, ent_type.name)
 
     <span class="hljs-keyword">var</span> data = args.data || {}
 
-    <span class="hljs-keyword">var</span> good = _.filter(_.keys(data),<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(k)</span></span>{<span class="hljs-keyword">return</span> !~k.indexOf(<span class="hljs-string">'$'</span>)})
+    <span class="hljs-keyword">var</span> good = _.filter(_.keys(data), <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">k</span>) </span>{ <span class="hljs-keyword">return</span> !~k.indexOf(<span class="hljs-string">'$'</span>) })
 
-    <span class="hljs-keyword">var</span> fields = _.pick(data,good)
+    <span class="hljs-keyword">var</span> fields = _.pick(data, good)
     ent.data$(fields)
 
-    <span class="hljs-keyword">if</span>( <span class="hljs-literal">null</span> != ent_type.entid ) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != ent_type.entid) {
       ent.id = ent_type.entid
     }
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( <span class="hljs-literal">null</span> != data.id$ &amp;&amp; options.allow_id ) {
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != data.id$ &amp;&amp; options.allow_id) {
       ent.id$ = data.id$
     }
 
-    save_aspect(si,{args:args,ent:ent},done,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctxt,done)</span></span>{
-      ctxt.ent.save$(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,ent)</span></span>{
-        <span class="hljs-keyword">var</span> data = ent ? ent.data$(<span class="hljs-literal">true</span>,<span class="hljs-string">'string'</span>) : <span class="hljs-literal">null</span>
+    save_aspect(si, {args: args, ent: ent}, done, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">ctxt, done</span>) </span>{
+      ctxt.ent.save$(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, ent</span>) </span>{
+        <span class="hljs-keyword">var</span> data = ent ? ent.data$(<span class="hljs-literal">true</span>, <span class="hljs-string">'string'</span>) : <span class="hljs-literal">null</span>
         done(err, data)
       })
     })
   }
 
-
-
-
-
-
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action_delete</span><span class="hljs-params">(args,done)</span></span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action_delete</span> (<span class="hljs-params">args, done</span>) </span>{
     <span class="hljs-keyword">var</span> ent_type = parse_ent(args)
 
-    <span class="hljs-keyword">if</span>( ent_type.entid ) {
-      <span class="hljs-keyword">var</span> ent = <span class="hljs-keyword">this</span>.make(ent_type.zone,ent_type.base,ent_type.name)
+    <span class="hljs-keyword">if</span> (ent_type.entid) {
+      <span class="hljs-keyword">var</span> ent = <span class="hljs-keyword">this</span>.make(ent_type.zone, ent_type.base, ent_type.name)
 
-      remove_aspect(<span class="hljs-keyword">this</span>,{args:args,ent:ent},done,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ctxt,done)</span></span>{
-        ctxt.ent.remove$(ent_type.entid,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span></span>{
-          <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>,{id:ent_type.entid})
+      remove_aspect(<span class="hljs-keyword">this</span>, {args: args, ent: ent}, done, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">ctxt, done</span>) </span>{
+        ctxt.ent.remove$(ent_type.entid, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+          <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, {id: ent_type.entid})
         })
       })
     }
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>,{id:<span class="hljs-literal">null</span>})
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, {id: <span class="hljs-literal">null</span>})
   }
 
-
-  
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resolve</span><span class="hljs-params">(req,res,args,act,respond)</span> </span>{
-    <span class="hljs-keyword">var</span> kind  = options.canonalias[req.params.kind] || req.params.kind
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resolve</span> (<span class="hljs-params">req, res, args, act, respond</span>) </span>{
+    <span class="hljs-keyword">var</span> kind = options.canonalias[req.params.kind] || req.params.kind
     <span class="hljs-keyword">var</span> parts = kind.split(<span class="hljs-string">'_'</span>)
-    
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">def</span><span class="hljs-params">(p)</span> </span>{ <span class="hljs-keyword">return</span> _.isString(p) ? (<span class="hljs-number">0</span> &lt; p.length ? p : <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>) : <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> }
 
-    <span class="hljs-keyword">if</span>( <span class="hljs-number">3</span> == parts.length ) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">def</span> (<span class="hljs-params">p</span>) </span>{ <span class="hljs-keyword">return</span> _.isString(p) ? (<span class="hljs-number">0</span> &lt; p.length ? p : <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>) : <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> }
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">3</span> == parts.length) {
       args.zone = def(parts[<span class="hljs-number">0</span>])
       args.base = def(parts[<span class="hljs-number">1</span>])
       args.name = def(parts[<span class="hljs-number">2</span>])
     }
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( <span class="hljs-number">2</span> == parts.length ) {
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> == parts.length) {
       args.zone = mark
       args.base = def(parts[<span class="hljs-number">0</span>])
       args.name = def(parts[<span class="hljs-number">1</span>])
     }
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( <span class="hljs-number">1</span> == parts.length ) {
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> == parts.length) {
       args.zone = mark
       args.base = mark
       args.name = def(parts[<span class="hljs-number">0</span>])
@@ -319,36 +296,35 @@ query meta data params use $ suffix</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>
-    <span class="hljs-keyword">if</span>( req.query ) {
-      args.q = seneca.util.clean( _.extend({},args.q$,req.query) )
+    <span class="hljs-keyword">if</span> (req.query) {
+      args.q = seneca.util.clean(_.extend({}, args.q$, req.query))
 
-      <span class="hljs-keyword">if</span>( req.query.q$ ) {
-        args.q = _.extend(<span class="hljs-built_in">JSON</span>.parse(req.query.q$),args.q)
+      <span class="hljs-keyword">if</span> (req.query.q$) {
+        args.q = _.extend(<span class="hljs-built_in">JSON</span>.parse(req.query.q$), args.q)
       }
 
-      <span class="hljs-keyword">if</span>( req.query.skip$ ) {
-        args.skip = <span class="hljs-built_in">parseInt</span>(req.query.skip$)
+      <span class="hljs-keyword">if</span> (req.query.skip$) {
+        args.skip = <span class="hljs-built_in">parseInt</span>(req.query.skip$, <span class="hljs-number">10</span>)
       }
 
-      <span class="hljs-keyword">if</span>( req.query.limit$ ) {
-        args.limit = <span class="hljs-built_in">parseInt</span>(req.query.limit$)
+      <span class="hljs-keyword">if</span> (req.query.limit$) {
+        args.limit = <span class="hljs-built_in">parseInt</span>(req.query.limit$, <span class="hljs-number">10</span>)
       }
 
-      <span class="hljs-keyword">if</span>( req.query.sort$ ) {
+      <span class="hljs-keyword">if</span> (req.query.sort$) {
         args.sort = req.query.sort$
       }
     }
-    
-    act(args,respond)
+
+    act(args, respond)
   }
 
+  _.each(pins, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pin</span>) </span>{
+    pin = _.extend({}, pin, {role: plugin, prefix: options.prefix, method: <span class="hljs-string">'*'</span>})
 
-  _.each(pins, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(pin)</span></span>{
-    pin = _.extend({},pin,{role:plugin,prefix:options.prefix,method:<span class="hljs-string">'*'</span>})
-    
-    seneca.act({role:<span class="hljs-string">'web'</span>,use:{
-      prefix:options.prefix,
-      pin:pin,</pre></div></div>
+    seneca.act({role: <span class="hljs-string">'web'</span>, use: {
+      prefix: options.prefix,
+      pin: pin,</pre></div></div>
             
         </li>
         
@@ -363,22 +339,21 @@ query meta data params use $ suffix</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      startware:options.startware,
-      premap:options.premap,
-      map:{
-        get:{GET:resolve,alias:<span class="hljs-string">':kind/:id?'</span>},
-        put:{PUT:resolve,alias:<span class="hljs-string">':kind/:id?'</span>,data:<span class="hljs-literal">true</span>},
-        post:{POST:resolve,alias:<span class="hljs-string">':kind/:id?'</span>,data:<span class="hljs-literal">true</span>},
-        <span class="hljs-keyword">delete</span>:{DELETE:resolve,alias:<span class="hljs-string">':kind/:id'</span>}
+            <div class="content"><div class='highlight'><pre>      startware: options.startware,
+      premap: options.premap,
+      map: {
+        get: {GET: resolve, alias: <span class="hljs-string">':kind/:id?'</span>},
+        put: {PUT: resolve, alias: <span class="hljs-string">':kind/:id?'</span>, data: <span class="hljs-literal">true</span>},
+        post: {POST: resolve, alias: <span class="hljs-string">':kind/:id?'</span>, data: <span class="hljs-literal">true</span>},
+        <span class="hljs-keyword">delete</span>: {DELETE: resolve, alias: <span class="hljs-string">':kind/:id'</span>}
       },
-      postmap:options.postmap,
-      endware:options.endware,
+      postmap: options.postmap,
+      endware: options.endware
     }})
   })
 
-
   <span class="hljs-keyword">return</span> {
-    name:plugin
+    name: plugin
   }
 }</pre></div></div>
             
