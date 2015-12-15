@@ -13,28 +13,28 @@ GET_FOO_a1=`curl -m 1 -s http://localhost:3000/api/rest/foo/a`
 
 kill -9 $NODE_PID
 
-if [ $GET_FOO_a0 != '{"entity$":"-/-/foo","tag":"A","id":"a"}' ]; then
+if [ $GET_FOO_a0 != '{"tag":"A","id":"a"}' ]; then
   echo "FAIL: $GET_FOO_a0"
   exit 1
 else
   echo "PASS: $GET_FOO_a0"
 fi
 
-if [ $GET_FOO_b0 != '{"entity$":"-/-/foo","tag":"B","id":"b"}' ]; then
+if [ $GET_FOO_b0 != '{"tag":"B","id":"b"}' ]; then
   echo "FAIL: $GET_FOO_b0"
   exit 1
 else
   echo "PASS: $GET_FOO_b0"
 fi
 
-if [ $POST_FOO_a0 != '{"entity$":"-/-/foo","tag":"AA","zed":1,"id":"a"}' ]; then
+if [ $POST_FOO_a0 != '{"tag":"AA","zed":1,"id":"a"}' ]; then
   echo "FAIL: $POST_FOO_a0"
   exit 1
 else
   echo "PASS: $POST_FOO_a0"
 fi
 
-if [ $GET_FOO_a1 != '{"entity$":"-/-/foo","tag":"AA","zed":1,"id":"a"}' ]; then
+if [ $GET_FOO_a1 != '{"tag":"AA","zed":1,"id":"a"}' ]; then
   echo "FAIL: $GET_FOO_a1"
   exit 1
 else
