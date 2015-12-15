@@ -4,8 +4,8 @@
   "description": "A HTTP JSON REST API for Seneca entities",
   "main": "jsonrest-api.js",
   "scripts": {
-    "test": "./test.sh",
-    "build": "./build.sh"
+    "test": "script/test.sh",
+    "build": "script/build.sh"
   },
   "repository": {
     "type": "git",

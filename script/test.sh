@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ./node_modules/.bin/mocha test/*.test.js
 
 cd test
@@ -8,6 +10,7 @@ GET_FOO_a0=`curl -m 1 -s http://localhost:3000/api/rest/foo/a`
 GET_FOO_b0=`curl -m 1 -s http://localhost:3000/api/rest/foo/b`
 POST_FOO_a0=`curl -m 1 -s -d '{"tag":"AA","zed":1}' -H "Content-Type: application/json" http://localhost:3000/api/rest/foo/a`
 GET_FOO_a1=`curl -m 1 -s http://localhost:3000/api/rest/foo/a`
+
 kill -9 $NODE_PID
 
 if [ $GET_FOO_a0 != '{"entity$":"-/-/foo","tag":"A","id":"a"}' ]; then
