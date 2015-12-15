@@ -1,5 +1,13 @@
 # seneca-jsonrest-api - a [Seneca](http://senecajs.org) plugin
 
+
+![npm version][npm-badge]][npm-url]
+[![Build Status][travis-badge]][travis-url]
+[![Coverage Status][coveralls-badge]][coveralls-url]
+[![Gitter chat][gitter-badge]][gitter-url]
+
+
+
 ## Seneca HTTP JSON REST API Plugin
 
 Exposes your data entities as a [REST
@@ -27,7 +35,7 @@ the patterns:
 
 ## Options
 
-You can _seneca.use_ this plugin multiple times to create multiple
+You can `seneca.use this plugin multiple times to create multiple
 independent API end points, so long as you specify different
 prefixes. The _prefix_ option is used to create separate action
 patterns so that they do not conflict.
@@ -43,20 +51,10 @@ patterns so that they do not conflict.
 
 
 ## Support
-
-Current Version: 0.3.1
-
-Tested on: Node 0.10.36, [Seneca](//github.com/rjrodger/seneca) 0.6.1
-
-[![Build Status](https://travis-ci.org/rjrodger/seneca-jsonrest-api.png?branch=master)](https://travis-ci.org/rjrodger/seneca-jsonrest-api)
-
 [Annotated Source Code](http://rjrodger.github.io/seneca-jsonrest-api/doc/jsonrest-api.html).
 
 If you're using this module, feel free to contact me on Twitter if you
 have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
-
-[![Gitter chat](https://badges.gitter.im/rjrodger/seneca-jsonrest-api.png)](https://gitter.im/rjrodger/seneca-jsonrest-api)
-
 
 ## Install
 
@@ -74,8 +72,12 @@ var seneca = require('seneca')()
     .use( 'jsonrest-api' )
 ```
 
-
-
-
-
+[npm-badge]: https://badge.fury.io/js/seneca-jsonrest-api.svg
+[npm-url]: https://badge.fury.io/js/seneca-jsonrest-api
+[travis-badge]: https://travis-ci.org/rjrodger/seneca-jsonrest-api.png?branch=master
+[travis-url]: https://travis-ci.org/rjrodger/seneca-jsonrest-api
+[coveralls-badge]: https://coveralls.io/repos/blainsmith/seneca-jwt/badge.svg?branch=master&service=github
+[coveralls-url]:  https://coveralls.io/github/blainsmith/seneca-jwt?branch=master
+[gitter-badge]: https://badges.gitter.im/rjrodger/seneca-jsonrest-api.png
+[gitter-url]: https://gitter.im/rjrodger/seneca-jsonrest-api
 

@@ -5,7 +5,8 @@
   "main": "jsonrest-api.js",
   "scripts": {
     "test": "script/test.sh",
-    "build": "script/build.sh"
+    "build": "script/build.sh",
+    "cover": "istanbul report text-summary lcov ; cat coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -22,8 +23,10 @@
   "devDependencies": {
     "body-parser": "~1.14.1",
     "connect": "~3.4.0",
+    "coveralls": "^2.11.6",
     "docco": "~0.7.0",
     "gex": "~0.2.0",
+    "istanbul": "^0.4.1",
     "jshint": "~2.8.0",
     "mocha": "~2.3.4",
     "seneca": "plugin",
