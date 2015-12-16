@@ -4,3 +4,10 @@ sudo: false
 node_js:
   - 4
   - 5
+
+cache:
+  directories:
+  - node_modules
+
+after_script:
+- npm run cover
