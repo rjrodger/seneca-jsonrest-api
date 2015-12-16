@@ -6,6 +6,7 @@
 ![npm version][npm-badge]][npm-url]
 [![Build Status][travis-badge]][travis-url]
 [![Coverage Status][coveralls-badge]][coveralls-url]
+[![Dependency Status][david-badge]][david-url]
 [![Gitter chat][gitter-badge]][gitter-url]
 
 
@@ -77,8 +78,10 @@ var seneca = require('seneca')()
 [npm-url]: https://badge.fury.io/js/seneca-jsonrest-api
 [travis-badge]: https://travis-ci.org/rjrodger/seneca-jsonrest-api.png?branch=master
 [travis-url]: https://travis-ci.org/rjrodger/seneca-jsonrest-api
-[coveralls-badge]: https://coveralls.io/repos/blainsmith/seneca-jwt/badge.svg?branch=master&service=github
-[coveralls-url]:  https://coveralls.io/github/blainsmith/seneca-jwt?branch=master
-[gitter-badge]: https://badges.gitter.im/rjrodger/seneca-jsonrest-api.png
+[coveralls-badge]: https://coveralls.io/repos/rjrodger/badge.svg?branch=master&service=github
+[coveralls-url]:  https://coveralls.io/github/rjrodger?branch=master
+[david-badge]: https://david-dm.org/toymachiner62/hapi-authorization.svg
+[david-url]: https://david-dm.org/seneca-jsonrest-api
+[gitter-badge]: https://badges.gitter.im/rjrodger/seneca-jsonrest-api.svg
 [gitter-url]: https://gitter.im/rjrodger/seneca-jsonrest-api
 
