@@ -1,11 +1,12 @@
-# seneca-jsonrest-api - a [Seneca](http://senecajs.org) plugin
+![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
+> A [Seneca.js](http://senecajs.org) plugin
 
+# seneca-jsonrest-api
 
 ![npm version][npm-badge]][npm-url]
 [![Build Status][travis-badge]][travis-url]
 [![Coverage Status][coveralls-badge]][coveralls-url]
 [![Gitter chat][gitter-badge]][gitter-url]
-
 
 
 ## Seneca HTTP JSON REST API Plugin
